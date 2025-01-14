@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈페이지</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<h1>안녕 홈피에요</h1>
+<div class="main-container" id="mainContainer">
+
+</div>
+<script>
+  $.ajax({
+    url:'/api/data', // 컨트롤러 서버의 주소
+    method:'GET',
+    dataType: 'json',
+    success:
+    function (data){
+      $('#mainContainer').append('<p>받은 데이터: '+JSON.stringify(data)+'</p>');
+    },
+    error:
+    function () {
+      $('#mainContainer').html('데이터 로딩 실패')
+
+    }
+  })
+</script>
+</body>
+</html>

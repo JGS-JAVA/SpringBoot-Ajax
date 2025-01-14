@@ -1,4 +1,4 @@
-package com.kh.AjaxProject.DBConfig;
+package com.kh.AjaxProject.config;
 
 
 /* @Configuration
@@ -84,10 +84,10 @@ public class DBConfig {
         sessionFactoryBean.setDataSource(dataSource);
 
 
-        sessionFactoryBean.setMapperLocations(
+        sessionFactoryBean.setMapperLocations(              // classpath = 리소스까지의 경로
                 applicationContext.getResources("classpath:/mappers/**.xml")  );
 
-        sessionFactoryBean.setTypeAliasesPackage("com.kh");
+        sessionFactoryBean.setTypeAliasesPackage("com.kh.AjaxProject");
 
         sessionFactoryBean.setConfigLocation(
                 applicationContext.getResource("classpath:mybatis-config.xml"));
