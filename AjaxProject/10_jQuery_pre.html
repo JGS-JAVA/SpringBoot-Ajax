@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10_jQuery_pre</title>
+    <link rel="icon" href="favicon.ico">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<div id="sideMenu">Side Menu</div>
+<button onclick="toggleMenu(true)">Open Menu</button>
+<button onclick="toggleMenu(false)">Close Menu</button>
+
+<script>       <!--jQuery로 바꾸기-->
+    function toggleMenu(show) {
+        const sideMenu = document.getElementById('sideMenu');
+        if (show) {
+            sideMenu.style.visibility = 'visible';
+            sideMenu.style.opacity = '1';
+            sideMenu.classList.add('active');
+        } else {
+            sideMenu.classList.remove('active');
+            sideMenu.style.visibility = 'hidden';
+            sideMenu.style.opacity = '0';
+        }
+    }
+
+</script>
+
+
+</body>
+</html>
