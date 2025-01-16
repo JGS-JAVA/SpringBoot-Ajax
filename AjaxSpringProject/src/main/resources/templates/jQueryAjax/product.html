@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>product</title>
+    <link rel="icon" href="/favicon.ico">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>상품 가져오기</h1>
+
+<div class="product-container" id="product-container">
+    <img id="product" src="">
+</div>
+<button id="btnProduct">상품 생성하기</button>
+
+<script>
+    //.toFixed(0 = 원화 소수점 이하 안함)
+    //.toFixed(2 = 원화 소수점 2자리까지 허용, 반올림)
+    //${Number((item.price * 1470).toFixed(0)).toLocaleString()}원
+    // -> toFixed가 문자열로 읽어서 정수에서 한국식으로 컴마 넣으려고 Number(  ) 로 감싼다
+    // 정수 숫자에 컴마 넣은것
+    const apiUrl="https://fakestoreapi.com/products";
+    function  loadProduct(){
+        $.ajax({
+            url:apiUrl,
+            method:'get',
+            success:
+                function (data) {
+                $.each(data, function (index,item) {
+                    $("#product-container").append(
+
+                        `
+                       <div class="product">
+                        <img src="${item.image}">
+                        <h2 color="product-tilte">${item.title}</h2>
+                        <h2 color="product-tilte">${Number((item.price * 1470).toFixed(0)).toLocaleString()}원</h2>
+                        <h2 color="product-tilte">${item.decription.substring(0,100)}...더보기</h2>
+                       </div>
+                        `
+                    )
+
+                })
+                    console.log("data : " + data);
+                    $("#product").attr('src',data.products);
+                },
+            error:
+                function () {
+                    $(".product-container").html('<p>데이터를 가져오는데 문제가 생겼습니다.</p>');
+                }
+        })
+    }
+
+    loadProduct();
+    $("#btnProduct").click(
+        function (){
+            loadProduct();
+        }
+    )
+
+
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

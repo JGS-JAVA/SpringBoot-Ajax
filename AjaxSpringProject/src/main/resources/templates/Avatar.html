@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicebear Avatar Generator</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+</head>
+<body>
+<h1>Avatar Generator</h1>
+<div class="avatar-container">
+    <img id="avatar"
+         src="https://api.dicebear.com/9.x/icons/svg?seed=Sophia"
+         alt="avatar"/>
+
+</div>
+<button id="btnAvatar">새 아바타 생성</button>
+
+<script>
+    function loadAvatar() {
+        const seed = Math.random().toString(36).substring(2, 15);
+        //Math.random() = 0이상 1 미만 랜덤소수값 생성 0.0001~0.999
+        //toString(36) 36진수 변환 예) 0.123456789 -> 0.4a9s8d7f6g
+        //substring(2,15) = 시작 인덱스와 끝 인덱스-1 한 문자 가져오기
+        //             0. 부분 제거후 길이 13 제한해 가져오기
+        //              4a9s8d7f6gxyz
+        const url = `https://api.dicebear.com/9.x/lorelei/svg?seed=${seed}`;
+
+        $("#avatar").attr('src', url);
+        // <img id= "avatar" src=https://api.dicebear.com/9.x/lorelei/svg?seed=Mason> 들어있다
+
+    }
+
+    $("#btnAvatar").click(
+        function () {
+
+            loadAvatar();
+
+        })
+
+</script>
+
+
+</body>
+</html>

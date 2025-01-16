@@ -22,7 +22,29 @@ public class IndexController {
     // userInfo.html 출력 설정하는 controller
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable int id, Model model) {
-        model.addAttribute("user",userService.getUserId(id));
+        model.addAttribute("user", userService.getUserId(id));
         return "userInfo";
+    }
+
+    @GetMapping("/get/avatar")
+    public String getAvatar() {
+        return "jQueryAjax/Avatar";
+
+    }
+
+    @GetMapping("/get/randomLogo")
+    public String getLogo() {
+        return "jQueryAjax/randomLogo";
+
+    }
+    @GetMapping("/get/product")
+    public String getProduct() {
+        return "jQueryAjax/product";
+
+    }
+    @GetMapping("/get/kakaoLogin")
+    public String getkakaoLogin() {
+        return "jQueryAjax/kakaoLogin";
+
     }
 }
