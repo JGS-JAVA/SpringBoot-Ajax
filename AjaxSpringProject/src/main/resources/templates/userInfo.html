@@ -6,13 +6,45 @@
     <title>유저 상세 조회</title>
     <link rel="icon" href="favicon.ico">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        #userDtail #profileImg{
+            width: 300px;
+            height: 300px;
+        }
+    </style>
 </head>
 <body>
 <h1>사용자 정보</h1>
-<div id="userDetail"></div>
-<p>데이터 로딩중</p>
-
+<div id="userDetail">
+    <img id="prifileImg">
+    <p id="username"></p>
+    <p id="email"></p>
+</div>
 <script>
+// https://api.dicebear.com/9.x/lorelei/svg?seed=시드코드 로 접속시 json 형식 아니라 이미지 하나라서 ajax 사용할 필요 없다
+
+    const seed = Math.random().toString(36).substring(2, 15);
+    console.log("seed:"+seed);
+    const API_IMG_URL = `https://api.dicebear.com/9.x/lorelei/svg?seed=${seed}`;
+    // $.ajax({
+    //     url: API_IMG_URL,
+    //     method: 'get',
+    //     success:
+    //         function () {
+    //
+    //             console.log("imgage data:"+imgData);
+    //                 $("#profileImg").attr('src',url);
+    //                 $("#username").append(`<p>이름: ${data.username}</p>>`)
+    //                 $("#email").html(`<p>이메일: ${data.email}</p>`)
+    //
+    //         }
+    //     },
+    //     error: function () {
+    //             $("#userDetail").html('<p> 데이터로딩 실패 </p>')
+    //
+    //     }
+    // })
+
     /*
     *  400 (bad request) = 잘못된 요청
     * 사용자가 잘못된 데이터를 백엔드에 보냈거나
@@ -24,30 +56,38 @@
     const queryParams = new URLSearchParams(window.location.search);
     console.log(window.location.search);
     const userId = queryParams.get('id');
-    console.log("userId"+userId);
-    const examId = 1;
+    console.log("userId" + userId);
+
 
     $.ajax({
-        url:`/api/user/${id}`, // ajaxController 작성한 api 작성
-        method:'get',
+        url: `/api/user/${userId}`, // ajaxController 작성한 api 작성
+        method: 'get',
         success:
-        function (data) {
-            isFinite(data.length>0){
-                $("#userDetail").html(`<p>아이디: ${data.id}</p>>`)
+            function (data) {
 
+            console.log("data.length:"+data.length); // undifined -> 데이터가 배열형태 아니거나 객체 아닐때 에러메시지
+            console.log("--------------------------------------------------------------");
+            console.log(!data); // 대괄호는 배열 데이터, 중괄호는 일반 데이터
+            if(!data){
+                $("#userDetail").html('<p> 일치 회원  없음 </p>')
 
-            }else{
-                $("#userDetail").html('<p>일치 회원 없음</p>')
+            }else {
+
+                $("#username").html(`<p>이름: ${data.username}</p>>`)
+                $("#email").html(`<p>이메일: ${data.email}</p>`)
+                $("#prifileImg").attr('src',API_IMG_URL)
+
             }
-        },
+
+
+            },
         error:
-        function () {
-            $("userDetail").html('<p>컨트롤러에서 데이터로딩 에러</p>')
-        }
+            function () {
+                $("#userDetail").html('<p>컨트롤러에서 데이터로딩 에러</p>')
+            }
     })
 
 </script>
-
 
 
 </body>
