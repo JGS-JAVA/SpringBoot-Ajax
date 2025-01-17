@@ -2,73 +2,175 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>product</title>
-    <link rel="icon" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>매장 상품</title>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #444;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        header .categories {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        header .categories .category {
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        header .categories .category:hover {
+            background-color: #0056b3;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-details {
+            padding: 15px;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin: 0 0 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .product-price {
+            color: #007BFF;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+    </style>
+
 </head>
 <body>
-<h1>상품 가져오기</h1>
-
+<header>
+    <h1>매장 상품</h1>
+    <div class="categories" id="categories"></div>
+</header>
 <div class="product-container" id="product-container">
-    <img id="product" src="">
-</div>
-<button id="btnProduct">상품 생성하기</button>
 
+</div>
 <script>
-    //.toFixed(0 = 원화 소수점 이하 안함)
-    //.toFixed(2 = 원화 소수점 2자리까지 허용, 반올림)
-    //${Number((item.price * 1470).toFixed(0)).toLocaleString()}원
-    // -> toFixed가 문자열로 읽어서 정수에서 한국식으로 컴마 넣으려고 Number(  ) 로 감싼다
-    // 정수 숫자에 컴마 넣은것
-    const apiUrl="https://fakestoreapi.com/products";
-    function  loadProduct(){
-        $.ajax({
-            url:apiUrl,
-            method:'get',
+    $.ajax({
+        url: "https://fakestoreapi.com/products/categories",
+        method: "GET",
+        success:
+            function (cateData) {
+                // DB로 가져올 경우 f12 -> network Name으로 cateData 를 찾아 데이터 정보를 확인할 수 있음
+                //  fakestoreapi에서 데이터를 제공할 때는 위 주소에서 전달하는 이름값으로 데이터 확인 가능
+                console.log(cateData);
+                if (cateData.length > 0) {
+                    $.each(cateData, function (index, item) {
+                        $("#categories").append(`<span class="category">${item}</span>`);
+                        // $("#categories").append(`<span class="category">${index + 1}     ${item}</span>`);
+
+                        // 카테고리 클릭 이벤트 추가
+                        $(".category").click( function () {
+                            // table tr td 선택 비슷한 경우
+                            // 특정 카테고리가 아니라 .category 클래스의 첫 번째 요소에 있는 data-category 값을 불러오게 됨
+                            // .category 대신 this 사용해서 data-category 값을 가져오도록 해야함
+                            //loadProducts($(".category").data("category"));
+                            loadProducts($(this).data("category"));
+                        })
+
+                    })
+                } else {
+                    $("#categories").html(`<p>카테고리가 DB에 존재하지 않습니다.</p>`);
+                }
+
+            },
+        error:
+            function (err) {
+                $("#categories").html(`<p>카테고리 로드 오류 백엔드 문제 발생</p>`);
+            }
+    })
+
+    //.toFixed(0)  = 원화에서 소수점 이하는 사용하지 않음 (반올림)
+    //.toFixed(2)  = 원화에서 소수점 2자리 까지만 허용하고 3자리 이후는 사용하지 않음  (반올림)
+    // Number((item.price * 1470).toFixed(0)).toLocaleString()
+    // (item.price * 1470).toFixed(0) = 문자열 형식
+    // toFixed가 문자열로 읽기 때문에 정수에서 한국식으로 comma 쉼표를 넣기 위해
+    // (item.price * 1470).toFixed(0) 괄호로 묶어서 Number 숫자로 문자열 정수형 변환
+    // 정수로 변환된 숫자에 한국식으로 컴마를 넣은 것
+
+    const API_URL = "https://fakestoreapi.com/products";
+
+    // 카테고리에 따라서 카테고리에 해당하는 데이터를 다시 가져오기
+    function loadProducts(category) { // category 매개변수명을 사용
+        $.ajax({  // https://fakestoreapi.com/products/category/해당카테고리
+            url: `${API_URL}/category/${category}`,
+            method: "get",
             success:
                 function (data) {
-                $.each(data, function (index,item) {
-                    $("#product-container").append(
-
-                        `
-                       <div class="product">
-                        <img src="${item.image}">
-                        <h2 color="product-tilte">${item.title}</h2>
-                        <h2 color="product-tilte">${Number((item.price * 1470).toFixed(0)).toLocaleString()}원</h2>
-                        <h2 color="product-tilte">${item.decription.substring(0,100)}...더보기</h2>
-                       </div>
-                        `
-                    )
-
-                })
-                    console.log("data : " + data);
-                    $("#product").attr('src',data.products);
-                },
-            error:
-                function () {
-                    $(".product-container").html('<p>데이터를 가져오는데 문제가 생겼습니다.</p>');
+                    $.each(data, function (index, item) {
+                        $("#product-container").append(
+                            `
+                            <div class="product">
+                               <img src="${item.image}">
+                               <div class="product-details">
+                                   <h2 class="product-title">${item.title}</h2>
+                                   <p class="product-price">${Number((item.price * 1470).toFixed(0)).toLocaleString()}원</p>
+                                   <p class="product-description">${item.description.substring(0, 100)}...더보기</p>
+                               </div>
+                           </div>
+                            `
+                        )
+                    })
                 }
         })
     }
 
-    loadProduct();
-    $("#btnProduct").click(
-        function (){
-            loadProduct();
-        }
-    )
-
 
 </script>
-
-
-
-
-
-
-
-
 </body>
 </html>
