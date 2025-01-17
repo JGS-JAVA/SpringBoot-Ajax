@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카페 목록</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<div id="cafeList">
+
+</div>
+<script>
+// 1. window.location.href
+// url 에 쿼리 문자열 사용하게 설정
+//현재 주소에서 ? 뒤의 쿼리문 반환
+/*
+* https://www.kht.co.kr/page?name=gildong&age=40
+* 위 주소에서 window.location.search 값은
+* ?    name = gildong    &   age=40
+* name 가져올때
+* .get("name");
+*
+* http://localhost:8080/cafe?id=아이디값
+* queryParams 안에 ?
+* */
+const queryParams = new URLSearchParams(window.location.search);
+console.log("queryParams: " + queryParams);
+const id = queryParams.get('id'); // ? 뒤에 키 이름으로 id 라 적힌 값 가진 상태
+$.ajax({
+
+   // url:`/api/cafes/$(new URLSearchParams(window.location.search)))`
+   // url:`/api/cafes/${id}` 달러표시는 문자열에서 자바스크립트 작성시 사용
+    url:"/api/cafes/{id}",
+    method: "GET",
+    success:
+    function (data) {
+        const cafeData=`
+        <p>카페이름 : ${data.name}</p>
+        <p>카페주소 : ${data.address}</p>
+        <p>카페번호 : ${data.phoneNumber}</p>
+        <p>시작시간 : ${data.openingTime}</p>
+        <p>마감시간 : ${data.closingTime}</p>
+        <p>카페설명 : ${data.description}</p>`;
+
+        $("#cafeList").append(cafeData);
+
+    },
+    error:
+    function () {
+        $("#cafeList").html("<p>데이터 로딩 실패</p>")
+    }
+})
+
+</script>
+</body>
+</html>

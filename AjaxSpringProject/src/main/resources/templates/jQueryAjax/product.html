@@ -111,7 +111,7 @@
                 console.log(cateData);
                 if (cateData.length > 0) {
                     $.each(cateData, function (index, item) {
-                        $("#categories").append(`<span class="category">${item}</span>`);
+                        $("#categories").append(`<span class="category" data-category="${item}">${item}</span>`);
                         // $("#categories").append(`<span class="category">${index + 1}     ${item}</span>`);
 
                         // 카테고리 클릭 이벤트 추가
@@ -153,6 +153,7 @@
             success:
                 function (data) {
                     $.each(data, function (index, item) {
+                        $("#product-container").empty();
                         $("#product-container").append(
                             `
                             <div class="product">

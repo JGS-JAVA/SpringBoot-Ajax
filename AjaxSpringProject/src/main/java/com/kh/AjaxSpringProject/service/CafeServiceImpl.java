@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CafeServiceImpl implements CafeService {
+public class CafeServiceImpl  implements CafeService {
 
     @Autowired
     private CafeMapper cafeMapper;
@@ -16,6 +16,10 @@ public class CafeServiceImpl implements CafeService {
     @Override
     public List<Cafe> getAllCafe() {
         return cafeMapper.getAllCafe();
+    }
 
+    @Override
+    public Cafe getCafeById(int id) {
+        return cafeMapper.getCafeById(id);
     }
 }

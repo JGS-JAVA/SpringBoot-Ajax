@@ -13,4 +13,5 @@ public interface CafeMapper {
 
     // 하나의 데이터만 조회할 때
     // DTO 파일명 mapper.xml 에서 작성한 id 명칭;
+    Cafe getCafeById(int id);
 }

@@ -7,6 +7,7 @@ import com.kh.AjaxSpringProject.service.CafeServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class CafeAjaxController {
     //  Impl 을 무조건 붙이기
     private CafeServiceImpl cafeService;
 
-    @GetMapping("/api/Cafe")
+    @GetMapping("/api/cafes")
     // CafeServiceImpl.java 파일에
     // getAllCafe() 메서드 자료형으로 List<Cafe>로 작성했기 때문에
     // public 다음에 List<Cafe>가 자료형으로 와야함
@@ -30,4 +31,12 @@ public class CafeAjaxController {
         return cafes ;
       //  return  cafeService.getAllCafe();
     }
+
+    @GetMapping("/api/cafes/{id}")
+    public Cafe getCafe(@PathVariable int id) {
+        Cafe cafe = cafeService.getCafeById(id);
+        log.info("Cafe: {}", cafe);
+        return cafe;
+    }
+
 }

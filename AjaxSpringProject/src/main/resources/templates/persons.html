@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유저들</title>
+    <link rel="icon" href="/favicon.ico">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<h1>유저 정보</h1>
+<div class="person-container" id="personsContainer"></div>
+
+<script>
+    $.ajax({
+        url: `/api/persons`, // Controller 작성한 API
+        method: 'GET',
+        success: function (personsData) {
+            if (personsData && personsData.length > 0) {
+                $.each(personsData, function (index, value) {
+                    console.log('유저 정보: ', value);
+                    $("#personsContainer").append(`
+                        <p>아이디: ${value.id}</p>
+                        <p>이메일: ${value.email}</p>
+                        <p>이름: ${value.username}</p>
+                        <p><a href="/persons?id=${value.id}">이동하기</a></p>
+                        <hr>
+                    `);
+                });
+            } else {
+                $('#personsContainer').append('<p>유저 정보가 없습니다.</p>');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX 요청 실패:', error);
+            $('#personsContainer').append('<p>데이터를 불러오는 데 실패했습니다.</p>');
+        }
+    });
+</script>
+</body>
+</html>
